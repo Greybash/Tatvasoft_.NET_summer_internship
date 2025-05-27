@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4 text-center">Signup</h2>
+
+      <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
+
+        
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            name="name"
+            [(ngModel)]="user.name"
+            #name="ngModel"
+            required
+          >
+          <div class="text-danger" *ngIf="name.touched && name.invalid">
+            Name is required.
+          </div>
+        </div>
+
+        
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="user.email"
+            #email="ngModel"
+            required
+            email
+          >
+          <div class="text-danger" *ngIf="email.touched && email.invalid">
+            Valid email is required.
+          </div>
+        </div>
+
+        
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="user.password"
+            #password="ngModel"
+            required
+            minlength="6"
+          >
+          <div class="text-danger" *ngIf="password.touched && password.invalid">
+            Password must be at least 6 characters.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="signupForm.invalid">
+          Sign Up
+        </button>
+        
+      </form>
+    </div>
+  </div>
+</div>
