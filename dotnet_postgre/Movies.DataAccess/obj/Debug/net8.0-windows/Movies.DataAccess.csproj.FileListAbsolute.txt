@@ -1,0 +1,14 @@
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\bin\Debug\net8.0-windows\Movies.DataAccess.deps.json
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\bin\Debug\net8.0-windows\Movies.DataAccess.dll
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\bin\Debug\net8.0-windows\Movies.DataAccess.pdb
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\Movies.DataAccess.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\Movies.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\Movies.DataAccess.AssemblyInfoInputs.cache
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\Movies.DataAccess.AssemblyInfo.cs
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\Movies.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\Movies.DataAccess.dll
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\refint\Movies.DataAccess.dll
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\Movies.DataAccess.pdb
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\ref\Movies.DataAccess.dll
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\bin\Debug\net8.0-windows\Movies.DataAccess.runtimeconfig.json
+C:\Users\HP\source\repos\Movie\Movies.DataAccess\obj\Debug\net8.0-windows\Movies.DataAccess.genruntimeconfig.cache

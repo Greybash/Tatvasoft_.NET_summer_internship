@@ -1,0 +1,17 @@
+C:\Users\HP\source\repos\Movie\Movies.Services\bin\Debug\net8.0-windows\Movies.Services.deps.json
+C:\Users\HP\source\repos\Movie\Movies.Services\bin\Debug\net8.0-windows\Movies.Services.dll
+C:\Users\HP\source\repos\Movie\Movies.Services\bin\Debug\net8.0-windows\Movies.Services.pdb
+C:\Users\HP\source\repos\Movie\Movies.Services\bin\Debug\net8.0-windows\Movies.DataAccess.dll
+C:\Users\HP\source\repos\Movie\Movies.Services\bin\Debug\net8.0-windows\Movies.DataAccess.pdb
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.Services.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.Services.AssemblyInfoInputs.cache
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.Services.AssemblyInfo.cs
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.Services.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.S.CE7C627A.Up2Date
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.Services.dll
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\refint\Movies.Services.dll
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.Services.pdb
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\ref\Movies.Services.dll
+C:\Users\HP\source\repos\Movie\Movies.Services\bin\Debug\net8.0-windows\Movies.Services.runtimeconfig.json
+C:\Users\HP\source\repos\Movie\Movies.Services\obj\Debug\net8.0-windows\Movies.Services.genruntimeconfig.cache
