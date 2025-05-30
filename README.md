@@ -5,4 +5,6 @@ Day 2: Creating Signup page with validation using Angular framework.
 
 Day 3: ASP.NET Core Web API project with proper status codes, full CRUD operations.
 
-Day 4: ASP.NET Core Web API project with full CRUD operations on postgre
+Day 4: ASP.NET Core Web API project with full CRUD operations on postgre.
+
+Day 5: Authentication and Authorization using JWT.
