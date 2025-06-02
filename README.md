@@ -8,3 +8,5 @@ Day 3: ASP.NET Core Web API project with proper status codes, full CRUD operatio
 Day 4: ASP.NET Core Web API project with full CRUD operations on postgre.
 
 Day 5: Authentication and Authorization using JWT.
+
+Day 6 : Role based authentication with angular frontend.
