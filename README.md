@@ -11,4 +11,6 @@ Day 5: Authentication and Authorization using JWT.
 
 Day 6 : Role based authentication with angular frontend.
 
-Day 7 : Join and data retrieval using entity framework .
+Day 7 : Join and data retrieval using entity framework.
+
+Day 8 : CRUD operations on users from frontend.
