@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Theme Management - Tatva Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #666;
+        }
+
+        .main-container {
+            padding: 20px 30px;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .add-btn {
+            background: #6c7ae0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-btn:hover {
+            background: #5a67d8;
+        }
+
+        .add-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        app-navbar {
+            flex-shrink: 0;
+            width: 250px;
+            z-index: 1;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        .edit-btn {
+            background: #6c7ae0;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #5a67d8;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .edit-btn:disabled,
+        .delete-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 10px;
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .page-btn.active {
+            background: #6c7ae0;
+            color: white;
+            border-color: #6c7ae0;
+        }
+
+        .page-btn:hover:not(.active) {
+            background: #f8f9fa;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input.error,
+        .form-group textarea.error,
+        .form-group select.error {
+            border-color: #dc3545;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background: #6c7ae0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .horizontal-gap {
+            width: 16px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #6c7ae0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: #6c757d;
+        }
+
+        .pagination-info {
+            color: #666;
+            font-size: 14px;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    
+<div class="dashboard-container">
+  <app-navbar></app-navbar>
+  <div class="horizontal-gap"></div>
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <div class="user-info">
+        <span>User</span>
+        <span>{{ currentDate | date: 'fullDate' }} - {{ currentDate | date: 'shortTime' }}</span>
+      </div>
+      <div>
+        <span>Tatva Admin</span>
+      </div>
+    </div>
+
+    <!-- Error Alert -->
+    <div *ngIf="error" class="alert alert-error">
+      {{ error }}
+    </div>
+
+    <!-- Search and Add -->
+    <div class="top-section">
+      <input
+        type="text"
+        class="search-box"
+        placeholder="Search themes by name..."
+        [(ngModel)]="searchTerm"
+        (input)="filterThemes()"
+        [disabled]="loading"
+      />
+      <button class="add-btn" (click)="openAddModal()" [disabled]="loading">
+        <span *ngIf="loading" class="loading-spinner"></span>
+        <span *ngIf="!loading">+</span> Add Theme
+      </button>
+    </div>
+
+    <!-- Theme Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Theme Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let theme of filteredThemes; trackBy: trackByFn">
+            <td>{{ theme.id }}</td>
+            <td>{{ theme.name }}</td>
+            <td>
+              <span
+                class="status-badge"
+                [ngClass]="theme.isActive ? 'status-active' : 'status-inactive'"
+              >
+                {{ theme.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <button 
+                class="action-btn edit-btn" 
+                (click)="editTheme(theme)"
+                [disabled]="loading"
+              >
+                EDIT
+              </button>
+              <button 
+                class="action-btn delete-btn" 
+                (click)="deleteTheme(theme.id)"
+                [disabled]="loading"
+              >
+                DELETE
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredThemes.length === 0 && !loading">
+            <td colspan="4" class="text-center text-muted">
+              {{ searchTerm ? 'No themes found matching your search.' : 'No themes available.' }}
+            </td>
+          </tr>
+          <tr *ngIf="loading">
+            <td colspan="4" class="text-center">
+              <span class="loading-spinner"></span>
+              Loading themes...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="totalPages > 1">
+        <span class="pagination-info">
+          Showing {{ ((currentPage - 1) * pageSize) + 1 }}-{{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} themes
+        </span>
+        <button 
+          class="page-btn" 
+          (click)="previousPage()" 
+          [disabled]="currentPage === 1 || loading"
+        >
+          &lt;
+        </button>
+        
+        <!-- Page numbers -->
+        <button 
+          *ngFor="let page of getPageNumbers()" 
+          class="page-btn" 
+          [class.active]="page === currentPage"
+          (click)="goToPage(page)"
+          [disabled]="loading"
+        >
+          {{ page }}
+        </button>
+        
+        <button 
+          class="page-btn" 
+          (click)="nextPage()" 
+          [disabled]="currentPage === totalPages || loading"
+        >
+          &gt;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" [class.show]="showModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          {{ isEditing ? 'Edit Mission Theme' : 'Add Mission Theme' }}
+        </h3>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+
+      <!-- Modal Error Alert -->
+      <div *ngIf="error" class="alert alert-error">
+        {{ error }}
+      </div>
+
+      <form [formGroup]="themeForm" (ngSubmit)="saveTheme()">
+        <div class="form-group">
+          <label for="themeName">Theme Name *</label>
+          <input 
+            type="text" 
+            id="themeName" 
+            formControlName="name" 
+            [class.error]="themeForm.get('name')?.invalid && themeForm.get('name')?.touched"
+            placeholder="Enter theme name (max 100 characters)"
+            maxlength="100"
+          />
+          <div class="error-message" *ngIf="getErrorMessage('name')">
+            {{ getErrorMessage('name') }}
+          </div>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="isActive" formControlName="isActive" />
+          <label for="isActive">Active</label>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="closeModal()" [disabled]="loading">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary" [disabled]="loading || themeForm.invalid">
+            <span *ngIf="loading" class="loading-spinner"></span>
+            {{ isEditing ? 'Update Theme' : 'Create Theme' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

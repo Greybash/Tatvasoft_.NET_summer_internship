@@ -1,0 +1,77 @@
+/* Add these styles to your main app component or global styles */
+
+/* App layout container */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Main content area adjustment for sidebar */
+.main-content {
+  flex: 1;
+  margin-left: 280px; /* Same as sidebar width */
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+  background-color: #f5f5f5;
+}
+
+/* If you have a main container, remove the margin since it's handled by main-content */
+.main-container {
+  padding: 20px 30px;
+  width: 100%;
+}
+
+/* Remove the existing header styles since sidebar replaces top navigation */
+.header {
+  background: white;
+  padding: 15px 30px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* Remove margin-left if you had it */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .main-container {
+    padding: 20px 15px;
+  }
+  
+  /* Add hamburger menu button if needed */
+  .mobile-menu-toggle {
+    display: block;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: #ff6b35;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu-toggle {
+    display: none;
+  }
+}
+
+/* Body adjustment to prevent horizontal scroll */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
