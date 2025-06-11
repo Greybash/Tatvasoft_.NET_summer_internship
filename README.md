@@ -14,3 +14,11 @@ Day 6 : Role based authentication with angular frontend.
 Day 7 : Join and data retrieval using entity framework.
 
 Day 8 : CRUD operations on users from frontend.
+
+Day 9 : MissionTheme n MissionSkill CRUD with Frontend.
+
+Day 10 : Mission CRUD with Frontend For Admin.
+
+Day 11 : Mission CRUD with Frontend User Side.
+
+Day 12 : MissionApplication CRUD with Frontend.
