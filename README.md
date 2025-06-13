@@ -23,4 +23,6 @@ Day 11 : Mission CRUD with Frontend User Side.
 
 Day 12 : MissionApplication CRUD with Frontend.
 
-Day 13 : Profile page and the full project.
+Day 13 : Profile page with frontend.
+
+Day 14: Project
