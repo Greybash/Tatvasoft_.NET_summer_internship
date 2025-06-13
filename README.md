@@ -25,4 +25,6 @@ Day 12 : MissionApplication CRUD with Frontend.
 
 Day 13 : Profile page with frontend.
 
-Day 14: Project
+Day 14: Aws session.
+
+Day 15: Discussion and full review.
