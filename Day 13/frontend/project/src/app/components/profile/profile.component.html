@@ -1,0 +1,402 @@
+<!-- User Profile Template for Angular Component -->
+<div class="dashboard-container">
+ 
+  
+  <div class="main-content">
+    <!-- Header -->
+   
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <span>Loading...</span>
+    </div>
+
+    <!-- Error Alert -->
+    <div *ngIf="error" class="alert alert-error">
+      {{ error }}
+    </div>
+
+    <!-- Profile Display (View Mode) -->
+    <div *ngIf="!isLoading && !showCreateForm && !isEditing && userDetail" class="profile-container">
+      <div class="profile-header">
+        <div class="profile-image-container">
+          <img 
+            *ngIf="profileImageUrl" 
+            [src]="profileImageUrl" 
+            alt="Profile Image"
+            class="profile-image"
+          />
+          <div *ngIf="!profileImageUrl" class="profile-image-placeholder">
+            {{ userDetail.name.charAt(0) }}{{ userDetail.surname.charAt(0) }}
+          </div>
+        </div>
+        <div class="profile-header-info">
+          <h1>{{ userDetail.name }} {{ userDetail.surname }}</h1>
+          <p class="profile-title">{{ userDetail.title || 'No title specified' }}</p>
+          <p class="profile-department">{{ userDetail.department || 'No department specified' }}</p>
+        </div>
+        <div class="profile-actions">
+          <button type="button" class="btn btn-primary" (click)="editProfile()">
+            Edit Profile
+          </button>
+          <button type="button" class="btn btn-danger" (click)="deleteProfile()">
+            Delete Profile
+          </button>
+        </div>
+      </div>
+
+      <div class="profile-details">
+        <section class="profile-section">
+          <h2 class="section-title">Basic Information</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Employee ID:</label>
+              <span>{{ userDetail.employeeId || 'Not specified' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Manager:</label>
+              <span>{{ userDetail.manager || 'Not specified' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Availability:</label>
+              <span>{{ userDetail.availability || 'Not specified' }}</span>
+            </div>
+            <div class="info-item">
+              <label>LinkedIn:</label>
+              <a *ngIf="userDetail.linkedInUrl" [href]="userDetail.linkedInUrl" target="_blank">
+                View Profile
+              </a>
+              <span *ngIf="!userDetail.linkedInUrl">Not provided</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="profile-section" *ngIf="userDetail.myProfile">
+          <h2 class="section-title">My Profile</h2>
+          <p class="profile-description">{{ userDetail.myProfile }}</p>
+        </section>
+
+        <section class="profile-section" *ngIf="userDetail.whyIVolunteer">
+          <h2 class="section-title">Why I Volunteer</h2>
+          <p class="profile-description">{{ userDetail.whyIVolunteer }}</p>
+        </section>
+
+        <section class="profile-section" *ngIf="skills && skills.length > 0">
+          <h2 class="section-title">My Skills</h2>
+          <div class="skills-display">
+            <span 
+              *ngFor="let skill of skills; trackBy: trackByFn" 
+              class="skill-tag-display"
+            >
+              {{ skill }}
+            </span>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Profile Form (Create/Edit Mode) -->
+    <div *ngIf="!isLoading && (showCreateForm || isEditing)" class="profile-container">
+      <form [formGroup]="userProfileForm" (ngSubmit)="onSubmit()" class="profile-form">
+        
+        <!-- Profile Image Upload -->
+        <section class="image-upload-section">
+          <h2 class="section-title">Profile Image</h2>
+          <div class="image-upload-container">
+            <div class="current-image">
+              <img 
+                *ngIf="profileImageUrl" 
+                [src]="profileImageUrl" 
+                alt="Profile Image"
+                class="profile-image-preview"
+              />
+              <div *ngIf="!profileImageUrl" class="profile-image-placeholder-large">
+                <span>No Image</span>
+              </div>
+            </div>
+            <div class="image-upload-controls">
+              <input 
+                type="file" 
+                #fileInput
+                accept="image/*"
+                (change)="onFileSelected($event)"
+                class="file-input"
+              />
+              <button 
+                type="button" 
+                class="btn btn-secondary"
+                (click)="fileInput.click()"
+              >
+                Choose Image
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Basic Information Section -->
+        <section>
+          <h2 class="section-title">Basic Information</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name*</label>
+              <input 
+                type="text" 
+                id="name"
+                formControlName="name"
+                placeholder="Enter your name"
+                [class.error]="isFieldInvalid('name')"
+              />
+              <div *ngIf="isFieldInvalid('name')" class="error-message">
+                {{ getFieldError('name') }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="surname">Surname*</label>
+              <input 
+                type="text" 
+                id="surname"
+                formControlName="surname"
+                placeholder="Enter your surname"
+                [class.error]="isFieldInvalid('surname')"
+              />
+              <div *ngIf="isFieldInvalid('surname')" class="error-message">
+                {{ getFieldError('surname') }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="employeeId">Employee ID*</label>
+              <input 
+                type="text" 
+                id="employeeId"
+                formControlName="employeeId"
+                placeholder="Enter your employee ID"
+                [class.error]="isFieldInvalid('employeeId')"
+              />
+              <div *ngIf="isFieldInvalid('employeeId')" class="error-message">
+                {{ getFieldError('employeeId') }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="manager">Manager</label>
+              <input 
+                type="text" 
+                id="manager"
+                formControlName="manager"
+                placeholder="Enter your manager's name"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input 
+                type="text" 
+                id="title"
+                formControlName="title"
+                placeholder="Enter your job title"
+              />
+            </div>
+            <div class="form-group">
+              <label for="department">Department</label>
+              <input 
+                type="text" 
+                id="department"
+                formControlName="department"
+                placeholder="Enter your department"
+              />
+            </div>
+          </div>
+
+          <div class="form-row full-width">
+            <div class="form-group">
+              <label for="myProfile">My Profile</label>
+              <textarea 
+                id="myProfile"
+                formControlName="myProfile"
+                placeholder="Tell us about yourself..."
+                rows="4"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="form-row full-width">
+            <div class="form-group">
+              <label for="whyIVolunteer">Why I Volunteer?</label>
+              <textarea 
+                id="whyIVolunteer"
+                formControlName="whyIVolunteer"
+                placeholder="Share why you volunteer..."
+                rows="4"
+              ></textarea>
+            </div>
+          </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Address Information Section -->
+        <section>
+          <h2 class="section-title">Address Information</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="countryId">Country*</label>
+              <select 
+                id="countryId" 
+                formControlName="countryId"
+                (change)="onCountryChange()"
+                [class.error]="isFieldInvalid('countryId')"
+              >
+                <option value="">Select Country</option>
+                <option 
+                  *ngFor="let country of countries; trackBy: trackByFn" 
+                  [value]="country.id"
+                >
+                  {{ country.name }}
+                </option>
+              </select>
+              <div *ngIf="isFieldInvalid('countryId')" class="error-message">
+                {{ getFieldError('countryId') }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cityId">City*</label>
+              <select 
+                id="cityId" 
+                formControlName="cityId"
+                [class.error]="isFieldInvalid('cityId')"
+              >
+                <option value="">Select City</option>
+                <option 
+                  *ngFor="let city of filteredCities; trackBy: trackByFn" 
+                  [value]="city.id"
+                >
+                  {{ city.name }}
+                </option>
+              </select>
+              <div *ngIf="isFieldInvalid('cityId')" class="error-message">
+                {{ getFieldError('cityId') }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Professional Information Section -->
+        <section>
+          <h2 class="section-title">Professional Information</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="availability">Availability</label>
+              <select id="availability" formControlName="availability">
+                <option value="">Select your availability</option>
+                <option 
+                  *ngFor="let option of availabilityOptions" 
+                  [value]="option.value"
+                >
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="linkedInUrl">LinkedIn URL</label>
+              <input 
+                type="url" 
+                id="linkedInUrl"
+                formControlName="linkedInUrl"
+                placeholder="https://linkedin.com/in/yourprofile"
+                [class.error]="isFieldInvalid('linkedInUrl')"
+              />
+              <div *ngIf="isFieldInvalid('linkedInUrl')" class="error-message">
+                {{ getFieldError('linkedInUrl') }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Skills Section -->
+        <section class="skills-section">
+          <h2 class="section-title">My Skills</h2>
+          <div class="skills-container">
+            <div class="skills-list">
+              <div 
+                *ngFor="let skill of skills; trackBy: trackByFn" 
+                class="skill-tag"
+              >
+                <span>{{ skill }}</span>
+                <button 
+                  type="button" 
+                  class="skill-remove"
+                  (click)="removeSkill(skill)"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            
+            <div class="add-skill-container">
+              <div class="skill-input-group">
+            <input 
+              type="text" 
+              [(ngModel)]="currentSkill" 
+              [ngModelOptions]="{standalone: true}"
+              placeholder="Enter a skill"
+              (keyup.enter)="addSkill()"
+              class="skill-input"
+            >
+
+          
+
+                <button 
+                  type="button" 
+                  class="btn btn-primary skill-add-btn"
+                  (click)="addSkill()"
+                  [disabled]="!currentSkill.trim()"
+                >
+                  Add Skill
+                </button>
+                
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="btn btn-secondary"
+            (click)="isEditing ? cancelEdit() : cancelCreate()"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="userProfileForm.invalid || isLoading"
+          >
+            <span *ngIf="isLoading" class="loading-spinner"></span>
+            {{ showCreateForm ? 'Create Profile' : 'Update Profile' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- No Profile Message -->
+    <div *ngIf="!isLoading && showCreateForm && !isEditing" class="no-profile-message">
+      <div class="empty-state">
+        <h2>Create Your Profile</h2>
+        <p>You don't have a profile yet. Create one to get started!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
