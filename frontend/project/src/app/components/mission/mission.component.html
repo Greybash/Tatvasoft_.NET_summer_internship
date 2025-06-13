@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Management - Tatva Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        app-navbar {
+            flex-shrink: 0;
+            width: 250px;
+            z-index: 1;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #666;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .add-btn {
+            background: #6c7ae0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-btn:hover {
+            background: #5a67d8;
+        }
+
+        .add-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        .edit-btn {
+            background: #6c7ae0;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #5a67d8;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .edit-btn:disabled,
+        .delete-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 10px;
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .page-btn.active {
+            background: #6c7ae0;
+            color: white;
+            border-color: #6c7ae0;
+        }
+
+        .page-btn:hover:not(.active) {
+            background: #f8f9fa;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 800px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input.error,
+        .form-group textarea.error,
+        .form-group select.error {
+            border-color: #dc3545;
+        }
+
+        .error-message {
+            color: #9e2c2c;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background: #6c7ae0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .type-time {
+            background: #e7f5ff;
+            color: #1c7ed6;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .type-goal {
+            background: #fff4e6;
+            color: #e67700;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .horizontal-gap {
+            width: 16px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #6c7ae0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: #6c757d;
+        }
+
+        .pagination-info {
+            color: #666;
+            font-size: 14px;
+            margin-right: 15px;
+        }
+
+        .filters-section {
+            margin-bottom: 20px;
+        }
+
+        .toggle-filters {
+            background: none;
+            border: none;
+            color: #6c7ae0;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filters-expanded {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 10px;
+        }
+
+        .filters-collapsed {
+            display: none;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-input, .filter-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-outline {
+            background: none;
+            border: 1px solid #6c757d;
+            color: #6c757d;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-outline:hover {
+            background: #f8f9fa;
+        }
+
+        .description-cell {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .mission-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .mission-image-thumb {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .image-upload-section {
+            margin-top: 10px;
+        }
+
+        .file-input {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .image-preview-item {
+            position: relative;
+        }
+
+        .image-preview-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <app-navbar></app-navbar>
+    <div class="horizontal-gap"></div>
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="user-info">
+                <span>User</span>
+                <span>{{ currentDate | date: 'fullDate' }} - {{ currentDate | date: 'shortTime' }}</span>
+            </div>
+            <div>
+                <span>Tatva Admin</span>
+            </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div *ngIf="error" class="alert alert-error">
+            {{ error }}
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <button class="toggle-filters" (click)="showFilters = !showFilters">
+                {{ showFilters ? '▼' : '▶' }} Filters
+            </button>
+            
+            <div [class]="showFilters ? 'filters-expanded' : 'filters-collapsed'">
+                <form [formGroup]="filterForm">
+                    <div class="filter-grid">
+                        <div class="form-group">
+                            <label>Mission Title</label>
+                            <input type="text" class="filter-input" formControlName="title" placeholder="Search by title...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Organisation Name</label>
+                            <input type="text" class="filter-input" formControlName="organisationName" placeholder="Search by organisation...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select class="filter-select" formControlName="countryId" (change)="onFilterCountryChange()">
+                                <option value="">All Countries</option>
+                                <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>City</label>
+                            <select class="filter-select" formControlName="cityId">
+                                <option value="">All Cities</option>
+                                <option *ngFor="let city of filteredCities" [value]="city.id">{{ city.name }}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Theme</label>
+                            <select class="filter-select" formControlName="themeId">
+                                <option value="">All Themes</option>
+                                <option *ngFor="let theme of themes" [value]="theme.id">{{ theme.name }}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Mission Type</label>
+                            <select class="filter-select" formControlName="missionType">
+                                <option value="">All Types</option>
+                                <option *ngFor="let type of missionTypes" [value]="type">{{ type }}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Start Date From</label>
+                            <input type="date" class="filter-input" formControlName="startDateFrom">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Start Date To</label>
+                            <input type="date" class="filter-input" formControlName="startDateTo">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="filter-select" formControlName="isActive">
+                                <option value="">All Status</option>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button type="button" class="btn-outline" (click)="clearFilters()" [disabled]="loading">
+                            Clear Filters
+                        </button>
+                        <button type="button" class="btn-primary" (click)="applyFilters()" [disabled]="loading">
+                            <span *ngIf="loading" class="loading-spinner"></span>
+                            Apply Filters
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Mission Button -->
+        <div class="top-section">
+            <div></div>
+            <button class="add-btn" (click)="openAddModal()" [disabled]="loading">
+                <span *ngIf="loading" class="loading-spinner"></span>
+                <span *ngIf="!loading">+</span> Add Mission
+            </button>
+        </div>
+
+        <!-- Mission Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Mission Title</th>
+                        <th>Organisation</th>
+                       
+                        <th>Type</th>
+                        <th>Total Seats</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        
+                        <th>Images</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let mission of filteredMissions; trackBy: trackByFn">
+                        <td>{{ mission.id }}</td>
+                        <td>
+                            <div class="mission-title">{{ mission.missionTitle }}</div>
+                            <div class="description-cell text-muted" [title]="mission.missionDescription">
+                                {{ mission.missionDescription }}
+                            </div>
+                        </td>
+                        <td>{{ mission.missionOrganisationName }}</td>
+                        
+                        <td>
+                            <span class="mission-type-badge" [ngClass]="mission.missionType === 'TIME' ? 'type-time' : 'type-goal'">
+                                {{ mission.missionType }}
+                            </span>
+                        </td>
+                         <td>{{ mission.totalSheets || 0 }}</td>
+                        <td>{{ formatDate(mission.startDate) }}</td>
+                        <td>{{ formatDate(mission.endDate) }}</td>
+                        <td>
+                            <span class="status-badge" [ngClass]="mission.isActive ? 'status-active' : 'status-inactive'">
+                                {{ mission.isActive ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="mission-images" *ngIf="getImageUrls(mission.missionImages).length > 0">
+                                <img 
+                                    *ngFor="let imageUrl of getImageUrls(mission.missionImages).slice(0, 3)" 
+                                    [src]="imageUrl" 
+                                    class="mission-image-thumb"
+                                    [alt]="mission.missionTitle"
+                                >
+                                <span *ngIf="getImageUrls(mission.missionImages).length > 3" class="text-muted">
+                                    +{{ getImageUrls(mission.missionImages).length - 3 }}
+                                </span>
+                            </div>
+                            <span *ngIf="getImageUrls(mission.missionImages).length === 0" class="text-muted">No images</span>
+                        </td>
+                        <td>
+                            <button class="action-btn edit-btn" (click)="editMission(mission)" [disabled]="loading">
+                                EDIT
+                            </button>
+                            <button class="action-btn delete-btn" (click)="deleteMission(mission.id)" [disabled]="loading">
+                                DELETE
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="filteredMissions.length === 0 && !loading">
+                        <td colspan="11" class="text-center text-muted">
+                            No missions found matching your criteria.
+                        </td>
+                    </tr>
+                    <tr *ngIf="loading">
+                        <td colspan="11" class="text-center">
+                            <span class="loading-spinner"></span>
+                            Loading missions...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="pagination" *ngIf="totalPages > 1">
+                <span class="pagination-info">
+                    Showing {{ ((currentPage - 1) * pageSize) + 1 }}-{{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} missions
+                </span>
+                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1 || loading">
+                    &lt;
+                </button>
+                
+                <button 
+                    *ngFor="let page of getPageNumbers()" 
+                    class="page-btn" 
+                    [class.active]="page === currentPage"
+                    (click)="goToPage(page)"
+                    [disabled]="loading"
+                >
+                    {{ page }}
+                </button>
+                
+                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages || loading">
+                    &gt;
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" [class.show]="showModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                {{ isEditing ? 'Edit Mission' : 'Add Mission' }}
+            </h3>
+            <button class="close-btn" (click)="closeModal()">&times;</button>
+        </div>
+
+        <!-- Modal Error Alert -->
+        <div *ngIf="error" class="alert alert-error">
+            {{ error }}
+        </div>
+
+        <form [formGroup]="missionForm" (ngSubmit)="saveMission()">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="missionTitle">Mission Title *</label>
+                    <input 
+                        type="text" 
+                        id="missionTitle" 
+                        formControlName="missionTitle" 
+                        [class.error]="missionForm.get('missionTitle')?.invalid && missionForm.get('missionTitle')?.touched"
+                        placeholder="Enter mission title"
+                        maxlength="200"
+                    />
+                    <div class="error-message" *ngIf="getErrorMessage('missionTitle')">
+                        {{ getErrorMessage('missionTitle') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="missionOrganisationName">Organisation Name *</label>
+                    <input 
+                        type="text" 
+                        id="missionOrganisationName" 
+                        formControlName="missionOrganisationName" 
+                        [class.error]="missionForm.get('missionOrganisationName')?.invalid && missionForm.get('missionOrganisationName')?.touched"
+                        placeholder="Enter organisation name"
+                        maxlength="200"
+                    />
+                    <div class="error-message" *ngIf="getErrorMessage('missionOrganisationName')">
+                        {{ getErrorMessage('missionOrganisationName') }}
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="missionDescription">Mission Description *</label>
+                    <textarea 
+                        id="missionDescription" 
+                        formControlName="missionDescription" 
+                        [class.error]="missionForm.get('missionDescription')?.invalid && missionForm.get('missionDescription')?.touched"
+                        placeholder="Enter mission description"
+                        maxlength="2000"
+                        rows="4"
+                    ></textarea>
+                    <div class="error-message" *ngIf="getErrorMessage('missionDescription')">
+                        {{ getErrorMessage('missionDescription') }}
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="missionOrganisationDetail">Organisation Detail</label>
+                    <textarea 
+                        id="missionOrganisationDetail" 
+                        formControlName="missionOrganisationDetail" 
+                        placeholder="Enter organisation details"
+                        maxlength="1000"
+                        rows="3"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="countryId">Country *</label>
+                    <select 
+                        id="countryId" 
+                        formControlName="countryId" 
+                        [class.error]="missionForm.get('countryId')?.invalid && missionForm.get('countryId')?.touched"
+                        (change)="onCountryChange()"
+                    >
+                        <option value="">Select Country</option>
+                        <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+                    </select>
+                    <div class="error-message" *ngIf="getErrorMessage('countryId')">
+                        {{ getErrorMessage('countryId') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cityId">City *</label>
+                    <select 
+                        id="cityId" 
+                        formControlName="cityId" 
+                        [class.error]="missionForm.get('cityId')?.invalid && missionForm.get('cityId')?.touched"
+                    >
+                        <option value="">Select City</option>
+                        <option *ngFor="let city of cities" [value]="city.id">{{ city.name }}</option>
+                    </select>
+                    <div class="error-message" *ngIf="getErrorMessage('cityId')">
+                        {{ getErrorMessage('cityId') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="missionThemeId">Mission Theme *</label>
+                    <select 
+                        id="missionThemeId" 
+                        formControlName="missionThemeId" 
+                        [class.error]="missionForm.get('missionThemeId')?.invalid && missionForm.get('missionThemeId')?.touched"
+                    >
+                        <option value="">Select Theme</option>
+                        <option *ngFor="let theme of themes" [value]="theme.id">{{ theme.name }}</option>
+                    </select>
+                    <div class="error-message" *ngIf="getErrorMessage('missionThemeId')">
+                        {{ getErrorMessage('missionThemeId') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="missionSkillId">Mission Skills *</label>
+                    <select 
+                        id="missionSkillId" 
+                        formControlName="missionSkillId" 
+                        [class.error]="missionForm.get('missionSkillId')?.invalid && missionForm.get('missionSkillId')?.touched"
+                    >
+                        <option value="">Select Skills</option>
+                        <option *ngFor="let skill of skills" [value]="skill.id">{{ skill.name }}</option>
+                    </select>
+                    <div class="error-message" *ngIf="getErrorMessage('missionSkillId')">
+                        {{ getErrorMessage('missionSkillId') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="missionType">Mission Type *</label>
+                    <select 
+                        id="missionType" 
+                        formControlName="missionType" 
+                        [class.error]="missionForm.get('missionType')?.invalid && missionForm.get('missionType')?.touched"
+                        (change)="onMissionTypeChange()"
+                    >
+                        <option value="">Select Type</option>
+                        <option *ngFor="let type of missionTypes" [value]="type">{{ type }}</option>
+                    </select>
+                    <div class="error-message" *ngIf="getErrorMessage('missionType')">
+                        {{ getErrorMessage('missionType') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="missionAvailability">Mission Availability</label>
+                    <select id="missionAvailability" formControlName="missionAvailability">
+                        <option value="">Select Availability</option>
+                        <option *ngFor="let availability of availabilityOptions" [value]="availability">{{ availability }}</option>
+                    </select>
+                </div>
+
+               <div class="form-group">
+    <label for="totalSheets">Total Sheets</label>
+    <input 
+        type="number" 
+        id="totalSheets" 
+        formControlName="totalSheets" 
+        [class.error]="missionForm.get('totalSheets')?.invalid && missionForm.get('totalSheets')?.touched"
+        placeholder="Enter total sheets (optional)"
+        min="0"
+    />
+    <div class="error-message" *ngIf="getErrorMessage('totalSheets')">
+        {{ getErrorMessage('totalSheets') }}
+    </div>
+</div>
+
+
+                <div class="form-group">
+                    <label for="startDate">Start Date *</label>
+                    <input 
+                        type="datetime-local" 
+                        id="startDate" 
+                        formControlName="startDate" 
+                        [class.error]="missionForm.get('startDate')?.invalid && missionForm.get('startDate')?.touched"
+                    />
+                    <div class="error-message" *ngIf="getErrorMessage('startDate')">
+                        {{ getErrorMessage('startDate') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="endDate">End Date *</label>
+                    <input 
+                        type="datetime-local" 
+                        id="endDate" 
+                        formControlName="endDate" 
+                        [class.error]="missionForm.get('endDate')?.invalid && missionForm.get('endDate')?.touched"
+                    />
+                    <div class="error-message" *ngIf="getErrorMessage('endDate')">
+                        {{ getErrorMessage('endDate') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="registrationDeadLine">Registration Deadline</label>
+                    <input 
+                        type="datetime-local" 
+                        id="registrationDeadLine" 
+                        formControlName="registrationDeadLine"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="missionVideoUrl">Video URL</label>
+                    <input 
+                        type="url" 
+                        id="missionVideoUrl" 
+        formControlName="missionVideoUrl" 
+        placeholder="Enter video URL"
+        maxlength="500"
+    />
+    <div class="error-message" *ngIf="getErrorMessage('missionVideoUrl')">
+        {{ getErrorMessage('missionVideoUrl') }}
+    </div>
+</div>
+
+<div class="form-group full-width image-upload-section">
+    <label for="missionImages">Upload Mission Images</label>
+    <input
+        type="file"
+        id="missionImages"
+        (change)="onFileSelected($event)"
+        multiple
+        accept="image/*"
+        class="file-input"
+    />
+    <div class="image-preview" *ngIf="previewImages.length > 0">
+        <div class="image-preview-item" *ngFor="let image of previewImages; let i = index">
+            <img [src]="image" alt="Preview Image">
+            <button type="button" class="remove-image" (click)="removeImage(i)">×</button>
+        </div>
+    </div>
+</div>
+
+<div class="form-group checkbox-group full-width">
+    <input type="checkbox" id="isActive" formControlName="isActive">
+    <label for="isActive">Is Active</label>
+</div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="closeModal()" [disabled]="loading">
+                    Cancel
+                </button>
+                <button type="submit" class="btn-primary" [disabled]="loading || uploadingImages">
+                    <span *ngIf="loading || uploadingImages" class="loading-spinner"></span>
+                    {{ (loading || uploadingImages) ? 'Saving...' : 'Save' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
